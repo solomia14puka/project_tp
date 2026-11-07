@@ -27,7 +27,7 @@ def run_test():
     ast_tree = parse_source(code)
     
     # 2. Виконуємо дерево через інтерпретатор
-    interp = Interpreter()
+    interp = Interpreter(trace=True)
     final_env = interp.evaluate(ast_tree)
     
     # 3. Виводимо результат

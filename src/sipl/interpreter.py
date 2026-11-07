@@ -4,18 +4,23 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 from ast_nodes import *
 
-
 class Interpreter:
-    def __init__(self):
-        # Словник
+    def __init__(self, trace=False):
         self.env = {}
+        self.trace = trace
+
+    def log_event(self, message: str):
+        if self.trace:
+            print(f"[TRACE] {message}")
 
     def evaluate(self, node):
-        """Рекурсивно обходить дерево і виконує операції."""
-        
         if hasattr(node, 'data') and node.data == 'start':
             return self.evaluate(node.children[0])
             
+        if self.trace and hasattr(node, 'line') and getattr(node, 'line', 0) > 0:
+            if isinstance(node, (Assign, While, If, Skip)):
+                self.log_event(f"Перехід на рядок {node.line}: інструкція {node.__class__.__name__}")
+                
         match node:
             case Program(statements=stmts):
                 for stmt in stmts:
@@ -23,7 +28,9 @@ class Interpreter:
                 return self.env
                 
             case Assign(var_name=name, expr=expr):
-                self.env[name] = self.evaluate(expr)
+                val = self.evaluate(expr)
+                self.env[name] = val
+                self.log_event(f"Подія: змінна '{name}' отримала нове значення {val}")
                 
             case While(condition=cond, body=body):
                 while self.evaluate(cond):
@@ -36,7 +43,7 @@ class Interpreter:
                     self.evaluate(fb)
                     
             case Skip():
-                pass # Нічого не робимо
+                pass
                 
             case Number(value=val):
                 return val
@@ -48,15 +55,10 @@ class Interpreter:
                 
             case BinOp(left=l, op=op, right=r):
                 left_val = self.evaluate(l)
-                
-                # Обробка унарного оператора 'not'
                 if op == 'not':
                     return not left_val
                     
-                # Обчислюємо праву частину для бінарних операторів
                 right_val = self.evaluate(r)
-                
-                # Математика та логіка
                 if op == '+': return left_val + right_val
                 elif op == '-': return left_val - right_val
                 elif op == '*': return left_val * right_val
@@ -67,5 +69,4 @@ class Interpreter:
                     raise ValueError(f"Невідомий оператор: {op}")
                     
             case _:
-                # Запобіжник: якщо потрапить невідомий вузол, програма видасть чітку помилку, а не впаде мовчки
                 raise ValueError(f"Інтерпретатор не знає, як виконати вузол: {type(node)} -> {node}")

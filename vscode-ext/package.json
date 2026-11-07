@@ -1,0 +1,26 @@
+{
+  "name": "sipl-syntax",
+  "displayName": "SIPL Language",
+  "description": "Syntax highlighting for SIPL",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [ "Programming Languages" ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "sipl",
+        "aliases": [ "SIPL", "sipl" ],
+        "extensions": [ ".sipl" ]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "sipl",
+        "scopeName": "source.sipl",
+        "path": "./syntaxes/sipl.tmLanguage.json"
+      }
+    ]
+  }
+}

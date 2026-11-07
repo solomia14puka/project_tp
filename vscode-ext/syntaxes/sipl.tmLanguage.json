@@ -1,0 +1,49 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "SIPL",
+  "scopeName": "source.sipl",
+  "patterns": [
+    { "include": "#keywords" },
+    { "include": "#operators" },
+    { "include": "#numbers" },
+    { "include": "#variables" }
+  ],
+  "repository": {
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.sipl",
+          "match": "\\b(begin|end|while|do|if|then|else|skip)\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.logical.sipl",
+          "match": "\\b(not|div)\\b"
+        },
+        {
+          "name": "keyword.operator.sipl",
+          "match": "(:=|=|\\>|\\+|-|\\*)"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.sipl",
+          "match": "\\b\\d+\\b"
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "name": "variable.other.sipl",
+          "match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b"
+        }
+      ]
+    }
+  }
+}
